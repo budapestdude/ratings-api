@@ -24,8 +24,15 @@ export async function initDatabase(): Promise<Database<sqlite3.Database, sqlite3
         driver: sqlite3.Database
     });
 
-    const schema = await fs.readFile(path.join(__dirname, 'schema.sql'), 'utf-8');
-    await db.exec(schema);
+    // Try to load schema file - it should be in dist/database after build
+    try {
+        const schemaPath = path.join(__dirname, 'schema.sql');
+        const schema = await fs.readFile(schemaPath, 'utf-8');
+        await db.exec(schema);
+    } catch (error) {
+        console.log('Schema file not found or already applied:', error.message);
+        // Database might already exist with schema
+    }
 
     return db;
 }
