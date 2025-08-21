@@ -1,19 +1,22 @@
 # Nixpacks configuration for Railway deployment
+[providers]
+node = "18"
 
 [phases.setup]
-nixPkgs = ["nodejs-18_x", "npm-9_x"]
+nixPkgs = ["nodejs-18_x"]
 
 [phases.install]
 cmds = [
-    "npm install",
-    "cd client && npm install && cd .."
+    "npm ci --omit=dev",
+    "cd client && npm ci --omit=dev"
 ]
 
-[phases.build]
+[phases.build] 
 cmds = [
+    "npm install",
     "npm run build",
-    "cd client && npm run build && cd .."
+    "cd client && npm install && npm run build"
 ]
 
 [start]
-cmd = "npm run start:prod"
+cmd = "NODE_ENV=production node dist/index.js"
