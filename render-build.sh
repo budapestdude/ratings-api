@@ -43,3 +43,12 @@ mkdir -p /var/data
 echo "✅ Build complete!"
 echo "Final directory structure:"
 ls -la
+echo ""
+echo "Contents of dist directory:"
+ls -la dist/
+echo ""
+echo "Absolute path to dist/index.js:"
+realpath dist/index.js || echo "File not found"
+echo ""
+echo "Node can find the module:"
+node -e "console.log(require.resolve('./dist/index.js'))" || echo "Module not resolvable"

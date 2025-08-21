@@ -6,7 +6,7 @@ services:
     region: oregon # or frankfurt, ohio, singapore
     plan: free # or starter ($7/month) for better performance
     buildCommand: ./render-build.sh
-    startCommand: npm run start:prod
+    startCommand: ./start.sh
     envVars:
       - key: NODE_ENV
         value: production
