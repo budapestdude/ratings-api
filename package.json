@@ -10,6 +10,7 @@
     "start:prod": "NODE_ENV=production node dist/index.js",
     "start:render": "NODE_ENV=production node dist/index.js",
     "build:all": "./build.sh",
+    "init-sample-data": "tsx src/scripts/init-sample-data.ts",
     "import-ratings": "tsx src/scripts/import-ratings.ts",
     "update-ratings": "tsx src/scripts/update-ratings.ts",
     "generate-top100": "tsx src/scripts/generate-top100.ts",

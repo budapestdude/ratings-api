@@ -10,6 +10,7 @@ import { initDatabase } from './database';
 import playersRouter from './routes/players';
 import rankingsRouter from './routes/rankings';
 import { RatingImporter } from './services/ratingImporter';
+import { initSampleData } from './scripts/init-sample-data';
 
 // Load environment variables based on NODE_ENV
 if (process.env.NODE_ENV === 'production') {
@@ -68,24 +69,50 @@ if (process.env.NODE_ENV === 'production') {
 app.get('/api/status', async (_, res) => {
     try {
         const db = await initDatabase();
+        
+        // Get database path
+        const dbPath = process.env.DATABASE_PATH || './data/fide_ratings.db';
+        
+        // Check if tables exist
+        const tables = await db.all(`
+            SELECT name FROM sqlite_master 
+            WHERE type='table' 
+            ORDER BY name
+        `);
+        
+        // Get counts from each table
+        const playerCount = await db.get('SELECT COUNT(*) as count FROM players').catch(() => ({ count: 0 }));
+        const ratingsCount = await db.get('SELECT COUNT(*) as count FROM ratings').catch(() => ({ count: 0 }));
+        
+        // Get last update info
         const lastUpdate = await db.get(`
             SELECT MAX(import_date) as last_update, COUNT(*) as total_lists
             FROM rating_lists
             WHERE status = 'completed'
-        `);
+        `).catch(() => ({ last_update: null, total_lists: 0 }));
         
-        const playerCount = await db.get('SELECT COUNT(*) as count FROM players');
+        // Get sample players if any exist
+        const samplePlayers = await db.all('SELECT fide_id, name FROM players LIMIT 5').catch(() => []);
         
         res.json({
             success: true,
+            database_path: dbPath,
+            tables: tables.map(t => t.name),
             data: {
-                last_update: lastUpdate?.last_update,
+                total_players: playerCount?.count || 0,
+                total_ratings: ratingsCount?.count || 0,
                 total_rating_lists: lastUpdate?.total_lists || 0,
-                total_players: playerCount?.count || 0
+                last_update: lastUpdate?.last_update,
+                sample_players: samplePlayers
             }
         });
     } catch (error) {
-        res.status(500).json({ success: false, error: 'Database error' });
+        console.error('Status error:', error);
+        res.status(500).json({ 
+            success: false, 
+            error: 'Database error',
+            details: error instanceof Error ? error.message : 'Unknown error'
+        });
     }
 });
 
@@ -93,6 +120,9 @@ async function startServer() {
     try {
         await initDatabase();
         console.log('Database initialized');
+        
+        // Initialize sample data if database is empty
+        await initSampleData();
 
         const schedule = process.env.UPDATE_SCHEDULE || '0 0 1 * *';
         cron.schedule(schedule, async () => {
