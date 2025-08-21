@@ -27,7 +27,7 @@ WORKDIR /app/client
 COPY client/package*.json ./
 COPY client/tsconfig.json ./
 COPY client/next.config.js ./
-COPY client/tailwind.config.ts ./
+COPY client/tailwind.config.js ./
 COPY client/postcss.config.js ./
 
 # Install dependencies
@@ -57,9 +57,9 @@ COPY --from=backend-builder /app/dist ./dist
 # Copy built frontend
 COPY --from=frontend-builder /app/client/out ./client/out
 
-# Copy database if exists (or create directory)
+# Create data directory for database
 RUN mkdir -p ./data
-COPY data/fide_ratings.db ./data/fide_ratings.db || true
+# Note: Database will be mounted as a volume in production
 
 # Set environment
 ENV NODE_ENV=production
