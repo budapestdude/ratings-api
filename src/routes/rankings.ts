@@ -19,7 +19,6 @@ router.get('/top', async (req, res) => {
         
         const db = await getDatabase();
         const currentYear = new Date().getFullYear();
-        const currentMonth = new Date().getMonth() + 1;
         
         let ratingColumn = 'r.standard_rating';
         let gamesColumn = 'r.standard_games';
@@ -32,8 +31,6 @@ router.get('/top', async (req, res) => {
             gamesColumn = 'r.blitz_games';
         }
         
-        // Calculate the date 12 months ago for activity check
-        const twelveMonthsAgo = `${currentYear - 1}${currentMonth.toString().padStart(2, '0')}01`;
         
         // Optimized query - get most recent ratings first
         // Use the date format from the actual data (YYYYMMDD)

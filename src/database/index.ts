@@ -30,7 +30,7 @@ export async function initDatabase(): Promise<Database<sqlite3.Database, sqlite3
         const schema = await fs.readFile(schemaPath, 'utf-8');
         await db.exec(schema);
     } catch (error) {
-        console.log('Schema file not found or already applied:', error.message);
+        console.log('Schema file not found or already applied:', error instanceof Error ? error.message : String(error));
         // Database might already exist with schema
     }
 
