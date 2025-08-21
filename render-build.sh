@@ -5,7 +5,6 @@ set -e  # Exit on error
 
 echo "🚀 Starting Render build process..."
 echo "Current directory: $(pwd)"
-echo "Full path: $(realpath .)"
 echo "Directory contents:"
 ls -la
 
@@ -27,28 +26,13 @@ echo "📂 Checking dist directory..."
 ls -la dist/
 echo "dist/index.js exists: $(test -f dist/index.js && echo 'YES' || echo 'NO')"
 
-# Install and build client
-echo "📦 Installing client dependencies..."
-cd client
-npm ci
-
-echo "🎨 Building client..."
-npm run build
-
-cd ..
+# Skip client build for now - deploy API only
+echo "📌 Skipping client build - API only deployment"
 
 # Create data directory if it doesn't exist
 echo "📁 Setting up data directory..."
-mkdir -p /var/data
+mkdir -p /var/data || true
 
 echo "✅ Build complete!"
 echo "Final directory structure:"
-ls -la
-echo ""
-echo "Testing build output:"
-node test-build.js
-echo ""
-echo "Full path to working directory:"
-pwd
-echo "Full real path:"
-realpath .
+ls -la dist/

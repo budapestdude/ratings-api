@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: process.env.NODE_ENV === 'production' ? 'export' : undefined,
+  // Remove static export - we'll serve from Express
+  // output: 'export',
   async rewrites() {
     // Only apply rewrites in development
     if (process.env.NODE_ENV !== 'production') {

@@ -173,15 +173,15 @@ export default function PlayerProfile({ params }: { params: { id: string } }) {
       date: date,
       standard: {
         rating: 2839 - (i * 5),
-        change: i === 0 ? null : Math.floor(Math.random() * 20) - 10
+        change: i === 0 ? undefined : Math.floor(Math.random() * 20) - 10
       },
       rapid: {
         rating: 2831 - (i * 3),
-        change: i === 0 ? null : Math.floor(Math.random() * 25) - 12
+        change: i === 0 ? undefined : Math.floor(Math.random() * 25) - 12
       },
       blitz: {
         rating: 2887 + (i * 2),
-        change: i === 0 ? null : Math.floor(Math.random() * 30) - 15
+        change: i === 0 ? undefined : Math.floor(Math.random() * 30) - 15
       }
     }))
   }
@@ -450,11 +450,17 @@ export default function PlayerProfile({ params }: { params: { id: string } }) {
                 <div className={`text-6xl font-bold ${getRatingColor(getCurrentRating())}`}>
                   {getCurrentRating() || 'Unrated'}
                 </div>
-                {getLatestChange() && getLatestChange().change && (
-                  <div className={`text-xl mt-3 font-semibold ${getLatestChange()!.change! > 0 ? 'text-green-400' : 'text-red-400'}`}>
-                    {getLatestChange()!.change! > 0 ? '↑' : '↓'} {Math.abs(getLatestChange()!.change!)}
-                  </div>
-                )}
+                {(() => {
+                  const latestChange = getLatestChange();
+                  if (latestChange && latestChange.change) {
+                    return (
+                      <div className={`text-xl mt-3 font-semibold ${latestChange.change > 0 ? 'text-green-400' : 'text-red-400'}`}>
+                        {latestChange.change > 0 ? '↑' : '↓'} {Math.abs(latestChange.change)}
+                      </div>
+                    );
+                  }
+                  return null;
+                })()}
               </div>
             </div>
           </div>
