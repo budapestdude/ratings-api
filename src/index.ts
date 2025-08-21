@@ -50,13 +50,19 @@ app.get('/api/health', (_, res) => {
 
 // Serve static files from Next.js build in production
 if (process.env.NODE_ENV === 'production') {
-    // Next.js build output (not static export)
-    const clientPath = path.join(__dirname, '../client/.next');
-    app.use('/_next', express.static(path.join(clientPath)));
-    app.use('/public', express.static(path.join(__dirname, '../client/public')));
+    // Serve Next.js static export
+    const clientPath = path.join(__dirname, '../client/out');
     
-    // For production, we'll just serve the API
-    // The client should be deployed separately or use Next.js server
+    // Serve static files
+    app.use(express.static(clientPath));
+    
+    // Serve index.html for client-side routing
+    app.get('*', (req, res) => {
+        // Don't serve index.html for API routes
+        if (!req.path.startsWith('/api')) {
+            res.sendFile(path.join(clientPath, 'index.html'));
+        }
+    });
 }
 
 app.get('/api/status', async (_, res) => {

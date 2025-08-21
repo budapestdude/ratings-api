@@ -5,8 +5,6 @@ set -e  # Exit on error
 
 echo "🚀 Starting Render build process..."
 echo "Current directory: $(pwd)"
-echo "Directory contents:"
-ls -la
 
 # Install backend dependencies
 echo "📦 Installing backend dependencies..."
@@ -21,18 +19,24 @@ echo "📄 Copying database schema..."
 mkdir -p dist/database
 cp src/database/schema.sql dist/database/
 
-# Verify build output
-echo "📂 Checking dist directory..."
-ls -la dist/
-echo "dist/index.js exists: $(test -f dist/index.js && echo 'YES' || echo 'NO')"
+# Build client
+echo "📦 Installing client dependencies..."
+cd client
+npm ci
 
-# Skip client build for now - deploy API only
-echo "📌 Skipping client build - API only deployment"
+echo "🎨 Building Next.js client..."
+npm run build
+
+cd ..
+
+# Verify build outputs
+echo "📂 Backend dist directory:"
+ls -la dist/
+echo "📂 Client out directory:"
+ls -la client/out/ | head -20
 
 # Create data directory if it doesn't exist
 echo "📁 Setting up data directory..."
 mkdir -p /var/data || true
 
 echo "✅ Build complete!"
-echo "Final directory structure:"
-ls -la dist/
