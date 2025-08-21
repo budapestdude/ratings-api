@@ -8,7 +8,7 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "start:prod": "NODE_ENV=production node dist/index.js",
-    "build:all": "npm run build && cd client && npm install && npm run build",
+    "build:all": "./build.sh",
     "import-ratings": "tsx src/scripts/import-ratings.ts",
     "update-ratings": "tsx src/scripts/update-ratings.ts",
     "generate-top100": "tsx src/scripts/generate-top100.ts",
