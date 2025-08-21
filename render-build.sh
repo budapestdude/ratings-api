@@ -39,4 +39,12 @@ ls -la client/out/ | head -20
 echo "📁 Setting up data directory..."
 mkdir -p /var/data || true
 
+# Check if database exists and has data
+if [ -f "/var/data/fide_ratings.db" ]; then
+    PLAYER_COUNT=$(sqlite3 /var/data/fide_ratings.db "SELECT COUNT(*) FROM players" 2>/dev/null || echo "0")
+    echo "📊 Database has $PLAYER_COUNT players"
+else
+    echo "📊 No database found, will initialize with sample data on first start"
+fi
+
 echo "✅ Build complete!"
