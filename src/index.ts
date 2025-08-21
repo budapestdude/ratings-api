@@ -40,17 +40,26 @@ app.use(compression());
 app.use(express.json());
 app.use('/api', limiter);
 
-// Serve static files from Next.js build in production
-if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '../client/out')));
-}
-
+// API routes
 app.use('/api/players', playersRouter);
 app.use('/api/rankings', rankingsRouter);
 
 app.get('/api/health', (_, res) => {
     res.json({ status: 'healthy', timestamp: new Date().toISOString() });
 });
+
+// Serve static files from Next.js build in production
+if (process.env.NODE_ENV === 'production') {
+    const clientPath = path.join(__dirname, '../client/out');
+    app.use(express.static(clientPath));
+    
+    // Catch-all route for client-side routing
+    app.get('*', (req, res) => {
+        if (!req.path.startsWith('/api')) {
+            res.sendFile(path.join(clientPath, 'index.html'));
+        }
+    });
+}
 
 app.get('/api/status', async (_, res) => {
     try {
