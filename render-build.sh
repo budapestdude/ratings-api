@@ -5,6 +5,7 @@ set -e  # Exit on error
 
 echo "🚀 Starting Render build process..."
 echo "Current directory: $(pwd)"
+echo "Full path: $(realpath .)"
 echo "Directory contents:"
 ls -la
 
@@ -44,11 +45,10 @@ echo "✅ Build complete!"
 echo "Final directory structure:"
 ls -la
 echo ""
-echo "Contents of dist directory:"
-ls -la dist/
+echo "Testing build output:"
+node test-build.js
 echo ""
-echo "Absolute path to dist/index.js:"
-realpath dist/index.js || echo "File not found"
-echo ""
-echo "Node can find the module:"
-node -e "console.log(require.resolve('./dist/index.js'))" || echo "Module not resolvable"
+echo "Full path to working directory:"
+pwd
+echo "Full real path:"
+realpath .
