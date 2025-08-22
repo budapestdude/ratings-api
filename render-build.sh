@@ -43,8 +43,32 @@ mkdir -p /var/data || true
 if [ -f "/var/data/fide_ratings.db" ]; then
     PLAYER_COUNT=$(sqlite3 /var/data/fide_ratings.db "SELECT COUNT(*) FROM players" 2>/dev/null || echo "0")
     echo "📊 Database has $PLAYER_COUNT players"
+    
+    # If we only have sample data (less than 100 players), download the full database
+    if [ "$PLAYER_COUNT" -lt "100" ]; then
+        echo "📥 Only sample data found, downloading full database..."
+        wget --no-check-certificate 'https://drive.google.com/uc?export=download&id=1ihWenMkIjmbzFIINzZ1c-VjoFC2pygKS' -O /var/data/fide_ratings_new.db
+        
+        if [ -f "/var/data/fide_ratings_new.db" ]; then
+            mv /var/data/fide_ratings_new.db /var/data/fide_ratings.db
+            echo "✅ Full database downloaded successfully!"
+        else
+            echo "⚠️ Download failed, keeping sample data"
+        fi
+    fi
 else
-    echo "📊 No database found, will initialize with sample data on first start"
+    echo "📊 No database found"
+    echo "📥 Downloading full FIDE database from Google Drive..."
+    
+    # Download the database from Google Drive
+    wget --no-check-certificate 'https://drive.google.com/uc?export=download&id=1ihWenMkIjmbzFIINzZ1c-VjoFC2pygKS' -O /var/data/fide_ratings.db
+    
+    if [ -f "/var/data/fide_ratings.db" ]; then
+        PLAYER_COUNT=$(sqlite3 /var/data/fide_ratings.db "SELECT COUNT(*) FROM players" 2>/dev/null || echo "0")
+        echo "✅ Database downloaded! Total players: $PLAYER_COUNT"
+    else
+        echo "⚠️ Download failed, will use sample data on first start"
+    fi
 fi
 
 echo "✅ Build complete!"
