@@ -118,9 +118,9 @@ export async function initSampleData() {
     
     try {
         // Check if we already have data
-        const playerCount = await db.get('SELECT COUNT(*) as count FROM players');
+        const playerCount = await db.get('SELECT COUNT(*) as count FROM players').catch(() => null);
         
-        if (playerCount?.count > 0) {
+        if (playerCount && playerCount.count > 0) {
             console.log(`Database already has ${playerCount.count} players, skipping sample data`);
             return;
         }

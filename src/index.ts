@@ -22,10 +22,15 @@ if (process.env.NODE_ENV === 'production') {
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Trust proxy for Render/Railway deployments
+app.set('trust proxy', 1);
+
 const limiter = rateLimit({
     windowMs: parseInt(process.env.API_RATE_WINDOW_MS || '60000'),
     max: parseInt(process.env.API_RATE_LIMIT || '100'),
-    message: 'Too many requests from this IP, please try again later.'
+    message: 'Too many requests from this IP, please try again later.',
+    standardHeaders: true,
+    legacyHeaders: false
 });
 
 app.use(helmet());
