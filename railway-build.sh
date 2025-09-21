@@ -3,9 +3,14 @@ set -e
 
 echo "Starting Railway build process..."
 
-# Install dependencies
-echo "Installing dependencies..."
-npm ci
+# Clean npm cache if needed
+echo "Cleaning npm cache..."
+rm -rf node_modules/.cache 2>/dev/null || true
+rm -rf /root/.npm/_logs 2>/dev/null || true
+
+# Install dependencies with clean install
+echo "Installing backend dependencies..."
+npm ci --prefer-offline --no-audit --omit=dev || npm install --omit=dev
 
 # Build TypeScript backend
 echo "Building backend..."
@@ -14,12 +19,21 @@ npm run build
 # Build frontend
 echo "Building frontend..."
 cd client
-npm ci
+
+# Clean client cache
+rm -rf node_modules/.cache 2>/dev/null || true
+rm -rf .next/cache 2>/dev/null || true
+
+# Install client dependencies
+echo "Installing frontend dependencies..."
+npm ci --prefer-offline --no-audit || npm install
+
 npm run build
 cd ..
 
 # Copy client build to dist for serving
 echo "Copying frontend build to dist..."
+mkdir -p dist
 cp -r client/dist dist/client
 
 # Initialize database if it doesn't exist
