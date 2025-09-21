@@ -1,5 +1,4 @@
 import { Pool } from 'pg';
-import { Database } from 'sqlite';
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
 import dotenv from 'dotenv';

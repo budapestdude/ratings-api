@@ -1,8 +1,8 @@
 import { Database } from 'sqlite';
 import sqlite3 from 'sqlite3';
 import { Pool } from 'pg';
-import { initDatabase as initSQLite, getDatabase as getSQLite, closeDatabase as closeSQLite } from './index';
-import { initPostgresDatabase, getPostgresDatabase, closePostgresDatabase, convertToPostgresQuery } from './postgres';
+import { initDatabase as initSQLite, closeDatabase as closeSQLite } from './index';
+import { initPostgresDatabase, closePostgresDatabase, convertToPostgresQuery } from './postgres';
 
 export type DatabaseAdapter = {
     query: (sql: string, params?: any[]) => Promise<any>;

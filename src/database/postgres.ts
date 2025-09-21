@@ -1,6 +1,4 @@
 import { Pool } from 'pg';
-import fs from 'fs/promises';
-import path from 'path';
 
 let pool: Pool | null = null;
 
