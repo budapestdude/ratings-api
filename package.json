@@ -17,11 +17,13 @@
     "generate-top100": "tsx src/scripts/generate-top100.ts",
     "monthly-update": "tsx src/scripts/monthly-update.ts",
     "monthly-update:now": "tsx src/scripts/monthly-update.ts --run-now",
+    "migrate:postgres": "tsx src/database/migrate.ts",
     "test": "jest",
     "lint": "eslint src --ext .ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@types/pg": "^8.15.5",
     "axios": "^1.6.2",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
@@ -30,6 +32,7 @@
     "express-rate-limit": "^7.1.5",
     "helmet": "^7.1.0",
     "node-cron": "^3.0.3",
+    "pg": "^8.16.3",
     "sqlite": "^5.1.1",
     "sqlite3": "^5.1.6",
     "unzipper": "^0.10.14",

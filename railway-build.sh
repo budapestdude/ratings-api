@@ -36,21 +36,29 @@ echo "Copying frontend build to dist..."
 mkdir -p dist
 cp -r client/out dist/client
 
-# Initialize database if it doesn't exist
-if [ ! -f "data/fide_ratings.db" ]; then
-    echo "Creating database directory..."
-    mkdir -p data
-
-    # Check if we have a database URL to download from
-    if [ -n "$FIDE_DATABASE_URL" ]; then
-        echo "Downloading FIDE database from provided URL..."
-        curl -L -o data/fide_ratings.db "$FIDE_DATABASE_URL"
-    else
-        echo "Initializing database with sample data..."
-        npm run init-sample-data
-    fi
+# Initialize database based on type
+if [ "$DATABASE_TYPE" = "postgresql" ] || [ -n "$DATABASE_URL" ]; then
+    echo "Using PostgreSQL database..."
+    # PostgreSQL schema will be created automatically when the app starts
+    # If you have SQLite data to migrate, you can run:
+    # npm run migrate:postgres
 else
-    echo "Database already exists, skipping initialization..."
+    # SQLite initialization
+    if [ ! -f "data/fide_ratings.db" ]; then
+        echo "Creating database directory..."
+        mkdir -p data
+
+        # Check if we have a database URL to download from
+        if [ -n "$FIDE_DATABASE_URL" ]; then
+            echo "Downloading FIDE database from provided URL..."
+            curl -L -o data/fide_ratings.db "$FIDE_DATABASE_URL"
+        else
+            echo "Initializing SQLite database with sample data..."
+            npm run init-sample-data
+        fi
+    else
+        echo "SQLite database already exists, skipping initialization..."
+    fi
 fi
 
 echo "Build completed successfully!"

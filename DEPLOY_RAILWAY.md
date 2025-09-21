@@ -70,18 +70,35 @@ railway up
 
 ## Database Setup
 
-### Option 1: Use Sample Data (Default)
-The application will automatically initialize with sample data if no database is provided.
+### Using PostgreSQL (Recommended for Production)
 
-### Option 2: Upload Full FIDE Database
-1. Host your `fide_ratings.db` file on a file hosting service (Google Drive, Dropbox, etc.)
-2. Get a direct download link
-3. Set the `FIDE_DATABASE_URL` environment variable to this link
+1. **Add PostgreSQL to your Railway project:**
+   - In your Railway project dashboard, click "New Service"
+   - Select "Database" → "Add PostgreSQL"
+   - Railway will automatically set the `DATABASE_URL` environment variable
 
-### Option 3: Use Railway PostgreSQL (Future Enhancement)
-Railway provides PostgreSQL databases. To use this:
-1. Add a PostgreSQL service to your project
-2. Update the application to support PostgreSQL (currently uses SQLite)
+2. **Set database type:**
+   Add this environment variable in Railway:
+   ```
+   DATABASE_TYPE=postgresql
+   ```
+
+3. **Migrate existing data (if needed):**
+   If you have existing SQLite data to migrate:
+   ```bash
+   # Set both DATABASE_URL and SQLITE_PATH environment variables
+   npm run migrate:postgres
+   ```
+
+### Using SQLite (Development/Testing)
+For development or if you prefer SQLite:
+1. Set environment variables:
+   ```
+   DATABASE_TYPE=sqlite
+   DATABASE_PATH=./data/fide_ratings.db
+   ```
+
+2. The application will automatically initialize with sample data
 
 ## Monitoring & Logs
 
