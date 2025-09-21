@@ -1,4 +1,4 @@
-import { initDatabase } from '../database';
+import { getDatabaseAdapter } from '../database/adapter';
 
 const samplePlayers = [
     {
@@ -114,7 +114,7 @@ const samplePlayers = [
 ];
 
 export async function initSampleData() {
-    const db = await initDatabase();
+    const db = await getDatabaseAdapter();
     
     try {
         // Check if we already have data

@@ -6,7 +6,7 @@ import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
 import cron from 'node-cron';
 import path from 'path';
-import { initDatabase } from './database';
+import { initDatabaseAdapter, getDatabaseAdapter } from './database/adapter';
 import playersRouter from './routes/players';
 import rankingsRouter from './routes/rankings';
 import { RatingImporter } from './services/ratingImporter';
@@ -102,41 +102,26 @@ if (process.env.NODE_ENV === 'production') {
 
 app.get('/api/status', async (_, res) => {
     try {
-        const db = await initDatabase();
-        
-        // Get database path
-        const dbPath = process.env.DATABASE_PATH || './data/fide_ratings.db';
-        
-        // Check if tables exist
-        const tables = await db.all(`
-            SELECT name FROM sqlite_master 
-            WHERE type='table' 
-            ORDER BY name
-        `);
-        
+        const db = await getDatabaseAdapter();
+
+        // Get database info
+        const dbType = process.env.DATABASE_TYPE === 'postgresql' || process.env.DATABASE_URL ? 'PostgreSQL' : 'SQLite';
+        const dbPath = dbType === 'SQLite' ? (process.env.DATABASE_PATH || './data/fide_ratings.db') : 'PostgreSQL Database';
+
         // Get counts from each table
         const playerCount = await db.get('SELECT COUNT(*) as count FROM players').catch(() => ({ count: 0 }));
         const ratingsCount = await db.get('SELECT COUNT(*) as count FROM ratings').catch(() => ({ count: 0 }));
-        
-        // Get last update info
-        const lastUpdate = await db.get(`
-            SELECT MAX(import_date) as last_update, COUNT(*) as total_lists
-            FROM rating_lists
-            WHERE status = 'completed'
-        `).catch(() => ({ last_update: null, total_lists: 0 }));
-        
+
         // Get sample players if any exist
         const samplePlayers = await db.all('SELECT fide_id, name FROM players LIMIT 5').catch(() => []);
         
         res.json({
             success: true,
+            database_type: dbType,
             database_path: dbPath,
-            tables: tables.map(t => t.name),
             data: {
                 total_players: playerCount?.count || 0,
                 total_ratings: ratingsCount?.count || 0,
-                total_rating_lists: lastUpdate?.total_lists || 0,
-                last_update: lastUpdate?.last_update,
                 sample_players: samplePlayers
             }
         });
@@ -152,7 +137,7 @@ app.get('/api/status', async (_, res) => {
 
 async function startServer() {
     try {
-        await initDatabase();
+        await initDatabaseAdapter();
         console.log('Database initialized');
         
         // Initialize sample data if database is empty
