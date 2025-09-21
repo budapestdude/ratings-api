@@ -33,7 +33,23 @@ const limiter = rateLimit({
     legacyHeaders: false
 });
 
-app.use(helmet());
+// Configure Helmet with CSP for Next.js
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+            styleSrc: ["'self'", "'unsafe-inline'"],
+            imgSrc: ["'self'", "data:", "https:"],
+            fontSrc: ["'self'", "data:"],
+            connectSrc: ["'self'"],
+            objectSrc: ["'none'"],
+            mediaSrc: ["'self'"],
+            frameSrc: ["'none'"],
+        },
+    },
+    crossOriginEmbedderPolicy: false,
+}));
 
 // Configure CORS for production
 const corsOptions = {
@@ -57,11 +73,24 @@ app.get('/api/health', (_, res) => {
 // Serve static files from Next.js build in production
 if (process.env.NODE_ENV === 'production') {
     // Serve Next.js static export
-    const clientPath = path.join(__dirname, '../client/out');
-    
-    // Serve static files
-    app.use(express.static(clientPath));
-    
+    const clientPath = path.join(__dirname, 'client');
+
+    // Serve static files with proper headers
+    app.use(express.static(clientPath, {
+        maxAge: '1d',
+        setHeaders: (res, path) => {
+            if (path.endsWith('.html')) {
+                res.setHeader('Cache-Control', 'no-cache');
+            }
+        }
+    }));
+
+    // Serve _next static files
+    app.use('/_next', express.static(path.join(clientPath, '_next'), {
+        maxAge: '365d',
+        immutable: true
+    }));
+
     // Serve index.html for client-side routing
     app.get('*', (req, res) => {
         // Don't serve index.html for API routes
