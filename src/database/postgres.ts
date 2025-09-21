@@ -55,17 +55,20 @@ async function initSchema(pool: Pool) {
             rapid_rating INTEGER,
             blitz_rating INTEGER,
             birthday INTEGER,
+            birth_year INTEGER,
             flag VARCHAR(10)
         )`,
 
         `CREATE TABLE IF NOT EXISTS ratings (
             id SERIAL PRIMARY KEY,
             fide_id INTEGER NOT NULL,
-            period VARCHAR(10) NOT NULL,
+            period VARCHAR(10),
+            rating_date DATE,
             standard_rating INTEGER,
             rapid_rating INTEGER,
             blitz_rating INTEGER,
             games INTEGER,
+            standard_games INTEGER,
             rapid_games INTEGER,
             blitz_games INTEGER,
             UNIQUE(fide_id, period)
