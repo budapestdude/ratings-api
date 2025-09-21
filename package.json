@@ -12,7 +12,8 @@
     "start:render": "NODE_ENV=production node dist/index.js",
     "build:all": "./build.sh",
     "init-sample-data": "tsx src/scripts/init-sample-data.ts",
-    "import-ratings": "tsx src/scripts/import-ratings.ts",
+    "import-ratings": "tsx src/scripts/import-all-ratings.ts",
+    "import-rapid-blitz": "tsx src/scripts/import-all-ratings.ts",
     "update-ratings": "tsx src/scripts/update-ratings.ts",
     "generate-top100": "tsx src/scripts/generate-top100.ts",
     "monthly-update": "tsx src/scripts/monthly-update.ts",
@@ -51,7 +52,7 @@
     "@typescript-eslint/parser": "^6.15.0",
     "eslint": "^8.56.0",
     "jest": "^29.7.0",
-    "tsx": "^4.7.0",
+    "tsx": "^4.20.5",
     "typescript": "^5.3.3"
   }
 }
