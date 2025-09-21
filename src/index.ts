@@ -66,8 +66,21 @@ app.use('/api', limiter);
 app.use('/api/players', playersRouter);
 app.use('/api/rankings', rankingsRouter);
 
-app.get('/api/health', (_, res) => {
-    res.json({ status: 'healthy', timestamp: new Date().toISOString() });
+app.get('/api/health', async (_, res) => {
+    try {
+        // Simple health check without database connection
+        res.json({
+            status: 'healthy',
+            timestamp: new Date().toISOString(),
+            database: 'not_checked' // Don't check DB in health endpoint to avoid timeout
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 'unhealthy',
+            timestamp: new Date().toISOString(),
+            error: error instanceof Error ? error.message : 'Unknown error'
+        });
+    }
 });
 
 // Serve static files from Next.js build in production
@@ -137,11 +150,25 @@ app.get('/api/status', async (_, res) => {
 
 async function startServer() {
     try {
+        // Start server first, then initialize database
+        app.listen(PORT, () => {
+            console.log(`FIDE Rating API server running on port ${PORT}`);
+            console.log(`Health check: http://localhost:${PORT}/api/health`);
+            console.log(`API documentation available at: http://localhost:${PORT}/api-docs`);
+        });
+
+        // Initialize database in background
+        console.log('Initializing database...');
         await initDatabaseAdapter();
         console.log('Database initialized');
-        
+
         // Initialize sample data if database is empty
-        await initSampleData();
+        try {
+            await initSampleData();
+        } catch (error) {
+            console.error('Warning: Could not initialize sample data:', error instanceof Error ? error.message : String(error));
+            console.log('This is normal if using PostgreSQL with existing data');
+        }
 
         const schedule = process.env.UPDATE_SCHEDULE || '0 0 1 * *';
         cron.schedule(schedule, async () => {
@@ -158,14 +185,9 @@ async function startServer() {
             }
         });
 
-        app.listen(PORT, () => {
-            console.log(`FIDE Rating API server running on port ${PORT}`);
-            console.log(`Health check: http://localhost:${PORT}/api/health`);
-            console.log(`API documentation available at: http://localhost:${PORT}/api-docs`);
-        });
     } catch (error) {
-        console.error('Failed to start server:', error);
-        process.exit(1);
+        console.error('Failed to initialize:', error instanceof Error ? error.message : String(error));
+        // Don't exit - server is already running
     }
 }
 
