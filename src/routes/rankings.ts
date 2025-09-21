@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getDatabase } from '../database';
+import { getDatabaseAdapter } from '../database/adapter';
 
 const router = Router();
 
@@ -17,7 +17,7 @@ router.get('/top', async (req, res) => {
             excludeInactive = 'true'
         } = req.query;
         
-        const db = await getDatabase();
+        const db = await getDatabaseAdapter();
         const currentYear = new Date().getFullYear();
         
         let ratingColumn = 'r.standard_rating';
@@ -35,10 +35,10 @@ router.get('/top', async (req, res) => {
         // Optimized query - get most recent ratings first
         // Use the date format from the actual data (YYYYMMDD)
         let query = `
-            SELECT p.*, ${ratingColumn} as rating, r.rating_date, ${gamesColumn} as games_played
+            SELECT p.*, ${ratingColumn} as rating, r.period as rating_date, ${gamesColumn} as games_played
             FROM players p
             INNER JOIN ratings r ON p.fide_id = r.fide_id
-            WHERE r.rating_date = '20250801'
+            WHERE r.period = '20250801'
             AND ${ratingColumn} IS NOT NULL
         `;
         
@@ -100,7 +100,7 @@ router.get('/top', async (req, res) => {
 
 router.get('/statistics', async (_, res) => {
     try {
-        const db = await getDatabase();
+        const db = await getDatabaseAdapter();
         
         const stats = await db.get(`
             SELECT 
@@ -164,7 +164,7 @@ router.get('/statistics', async (_, res) => {
 
 router.get('/federations', async (_, res) => {
     try {
-        const db = await getDatabase();
+        const db = await getDatabaseAdapter();
         
         const federations = await db.all(`
             SELECT 

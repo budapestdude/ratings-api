@@ -128,35 +128,88 @@ export async function initSampleData() {
         console.log('Database is empty, adding sample data...');
         
         // Insert sample players
+        const isPostgres = process.env.DATABASE_TYPE === 'postgresql' || !!process.env.DATABASE_URL;
+
         for (const player of samplePlayers) {
-            await db.run(`
-                INSERT OR IGNORE INTO players (
-                    fide_id, name, title, federation, sex, birth_year
-                ) VALUES (?, ?, ?, ?, ?, ?)
-            `, [
-                player.fide_id,
-                player.name,
-                player.title,
-                player.federation,
-                player.sex,
-                player.birth_year
-            ]);
-            
-            // Insert current ratings
-            await db.run(`
-                INSERT OR IGNORE INTO ratings (
-                    fide_id, rating_date, 
-                    standard_rating, rapid_rating, blitz_rating,
-                    standard_games, rapid_games, blitz_games
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-            `, [
-                player.fide_id,
-                '20250801', // August 2025
-                player.standard_rating,
-                player.rapid_rating,
-                player.blitz_rating,
-                0, 0, 0 // games played
-            ]);
+            // First insert into players table
+            if (isPostgres) {
+                await db.run(`
+                    INSERT INTO players (
+                        fide_id, name, title, federation, sex, birth_year,
+                        rating, rapid_rating, blitz_rating
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    ON CONFLICT (fide_id) DO UPDATE SET
+                        name = EXCLUDED.name,
+                        title = EXCLUDED.title,
+                        rating = EXCLUDED.rating,
+                        rapid_rating = EXCLUDED.rapid_rating,
+                        blitz_rating = EXCLUDED.blitz_rating
+                `, [
+                    player.fide_id,
+                    player.name,
+                    player.title,
+                    player.federation,
+                    player.sex,
+                    player.birth_year,
+                    player.standard_rating,
+                    player.rapid_rating,
+                    player.blitz_rating
+                ]);
+
+                // Insert ratings history
+                await db.run(`
+                    INSERT INTO ratings (
+                        fide_id, period,
+                        standard_rating, rapid_rating, blitz_rating,
+                        games, rapid_games, blitz_games
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                    ON CONFLICT (fide_id, period) DO UPDATE SET
+                        standard_rating = EXCLUDED.standard_rating,
+                        rapid_rating = EXCLUDED.rapid_rating,
+                        blitz_rating = EXCLUDED.blitz_rating
+                `, [
+                    player.fide_id,
+                    '20250801', // August 2025
+                    player.standard_rating,
+                    player.rapid_rating,
+                    player.blitz_rating,
+                    0, 0, 0 // games played
+                ]);
+            } else {
+                // SQLite version
+                await db.run(`
+                    INSERT OR REPLACE INTO players (
+                        fide_id, name, title, federation, sex, birth_year,
+                        rating, rapid_rating, blitz_rating
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                `, [
+                    player.fide_id,
+                    player.name,
+                    player.title,
+                    player.federation,
+                    player.sex,
+                    player.birth_year,
+                    player.standard_rating,
+                    player.rapid_rating,
+                    player.blitz_rating
+                ]);
+
+                // Insert current ratings
+                await db.run(`
+                    INSERT OR REPLACE INTO ratings (
+                        fide_id, period,
+                        standard_rating, rapid_rating, blitz_rating,
+                        games, rapid_games, blitz_games
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                `, [
+                    player.fide_id,
+                    '20250801', // August 2025
+                    player.standard_rating,
+                    player.rapid_rating,
+                    player.blitz_rating,
+                    0, 0, 0 // games played
+                ]);
+            }
         }
         
         console.log(`Added ${samplePlayers.length} sample players to database`);

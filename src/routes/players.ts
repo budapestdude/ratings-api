@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getDatabase } from '../database';
+import { getDatabaseAdapter } from '../database/adapter';
 import { PlayerWithRating } from '../models/player';
 
 const router = Router();
@@ -7,7 +7,7 @@ const router = Router();
 router.get('/search', async (req, res) => {
     try {
         const { name, federation, minRating, maxRating, title, limit = 50, offset = 0 } = req.query;
-        const db = await getDatabase();
+        const db = await getDatabaseAdapter();
         
         let query = `
             SELECT DISTINCT p.*, 
@@ -52,7 +52,7 @@ router.get('/search', async (req, res) => {
         query += ' ORDER BY r.standard_rating DESC LIMIT ? OFFSET ?';
         params.push(limit, offset);
 
-        const players = await db.all<PlayerWithRating[]>(query, params);
+        const players = await db.all(query, params) as PlayerWithRating[];
         
         res.json({
             success: true,
@@ -71,9 +71,9 @@ router.get('/search', async (req, res) => {
 router.get('/:fideId', async (req, res) => {
     try {
         const { fideId } = req.params;
-        const db = await getDatabase();
+        const db = await getDatabaseAdapter();
         
-        const player = await db.get<PlayerWithRating>(`
+        const player = await db.get(`
             SELECT p.*, 
                    r.standard_rating, r.rapid_rating, r.blitz_rating, r.rating_date
             FROM players p
@@ -84,7 +84,7 @@ router.get('/:fideId', async (req, res) => {
                 GROUP BY fide_id
             ) latest ON r.fide_id = latest.fide_id AND r.rating_date = latest.max_date
             WHERE p.fide_id = ?
-        `, fideId);
+        `, [fideId]);
 
         if (!player) {
             res.status(404).json({ success: false, error: 'Player not found' });
@@ -102,7 +102,7 @@ router.get('/:fideId/history', async (req, res) => {
     try {
         const { fideId } = req.params;
         const { startDate, endDate, limit = 1000 } = req.query;
-        const db = await getDatabase();
+        const db = await getDatabaseAdapter();
         
         let query = `
             SELECT * FROM ratings 
@@ -135,7 +135,7 @@ router.get('/:fideId/history', async (req, res) => {
 router.get('/:fideId/rating-changes', async (req, res) => {
     try {
         const { fideId } = req.params;
-        const db = await getDatabase();
+        const db = await getDatabaseAdapter();
         
         const changes = await db.all(`
             SELECT 
@@ -150,7 +150,7 @@ router.get('/:fideId/rating-changes', async (req, res) => {
             WHERE fide_id = ?
             ORDER BY rating_date DESC
             LIMIT 12
-        `, fideId);
+        `, [fideId]);
 
         const formattedChanges = changes.map(row => ({
             date: row.rating_date,
