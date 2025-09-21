@@ -117,7 +117,8 @@ async function migrateFromSQLiteToPostgres() {
                     migrated++;
                 } catch (err) {
                     // Continue on error for individual records
-                    console.error(`Error migrating player ${player.fide_id}:`, err.message);
+                    const errorMessage = err instanceof Error ? err.message : String(err);
+                    console.error(`Error migrating player ${player.fide_id}:`, errorMessage);
                 }
             }
 
@@ -179,7 +180,8 @@ async function migrateFromSQLiteToPostgres() {
 
                 ratingsMigrated += batch.length;
             } catch (err) {
-                console.error(`Error migrating ratings batch at offset ${offset}:`, err.message);
+                const errorMessage = err instanceof Error ? err.message : String(err);
+                console.error(`Error migrating ratings batch at offset ${offset}:`, errorMessage);
                 // Try individual inserts for this batch
                 for (const rating of batch) {
                     try {
