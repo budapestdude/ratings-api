@@ -34,7 +34,7 @@ cd ..
 # Copy client build to dist for serving
 echo "Copying frontend build to dist..."
 mkdir -p dist
-cp -r client/dist dist/client
+cp -r client/out dist/client
 
 # Initialize database if it doesn't exist
 if [ ! -f "data/fide_ratings.db" ]; then
