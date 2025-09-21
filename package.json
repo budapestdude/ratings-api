@@ -8,6 +8,7 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "start:prod": "NODE_ENV=production node dist/index.js",
+    "start:production": "NODE_ENV=production node dist/index.js",
     "start:render": "NODE_ENV=production node dist/index.js",
     "build:all": "./build.sh",
     "init-sample-data": "tsx src/scripts/init-sample-data.ts",
