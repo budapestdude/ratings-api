@@ -30,74 +30,192 @@ async function migrateFromSQLiteToPostgres() {
         await pgPool.query('SELECT NOW()');
         console.log('Connected to PostgreSQL');
 
+        // Create PostgreSQL schema first
+        console.log('Creating PostgreSQL schema...');
+
+        // Create tables
+        await pgPool.query(`
+            CREATE TABLE IF NOT EXISTS players (
+                id SERIAL PRIMARY KEY,
+                fide_id INTEGER UNIQUE NOT NULL,
+                name VARCHAR(255) NOT NULL,
+                federation VARCHAR(10),
+                sex VARCHAR(1),
+                title VARCHAR(10),
+                w_title VARCHAR(10),
+                o_title VARCHAR(10),
+                foa_title VARCHAR(10),
+                rating INTEGER,
+                rapid_rating INTEGER,
+                blitz_rating INTEGER,
+                birthday INTEGER,
+                birth_year INTEGER,
+                flag VARCHAR(10)
+            )
+        `);
+
+        await pgPool.query(`
+            CREATE TABLE IF NOT EXISTS ratings (
+                id SERIAL PRIMARY KEY,
+                fide_id INTEGER NOT NULL,
+                period VARCHAR(10),
+                rating_date DATE,
+                standard_rating INTEGER,
+                rapid_rating INTEGER,
+                blitz_rating INTEGER,
+                games INTEGER,
+                rapid_games INTEGER,
+                blitz_games INTEGER,
+                standard_games INTEGER
+            )
+        `);
+
+        // Create indexes
+        console.log('Creating indexes...');
+        await pgPool.query('CREATE INDEX IF NOT EXISTS idx_players_fide_id ON players(fide_id)');
+        await pgPool.query('CREATE INDEX IF NOT EXISTS idx_ratings_fide_id ON ratings(fide_id)');
+        await pgPool.query('CREATE INDEX IF NOT EXISTS idx_ratings_date ON ratings(rating_date)');
+
         // Migrate players table
         console.log('Migrating players...');
-        const players = await sqliteDb.all('SELECT * FROM players');
+        const playerCount = await sqliteDb.get('SELECT COUNT(*) as count FROM players');
+        console.log(`Found ${playerCount.count} players to migrate`);
 
-        if (players.length > 0) {
-            for (let i = 0; i < players.length; i += 1000) {
-                const batch = players.slice(i, i + 1000);
+        const batchSize = 500;
+        let migrated = 0;
 
-                const values = batch.map(p =>
-                    `(${p.fide_id}, '${p.name.replace(/'/g, "''")}', '${p.federation || ''}', '${p.sex || ''}',
-                    '${p.title || ''}', '${p.w_title || ''}', '${p.o_title || ''}', '${p.foa_title || ''}',
-                    ${p.rating || 'NULL'}, ${p.rapid_rating || 'NULL'}, ${p.blitz_rating || 'NULL'},
-                    ${p.birthday || 'NULL'}, '${p.flag || ''}')`
-                ).join(',');
+        // Process in batches
+        for (let offset = 0; offset < playerCount.count; offset += batchSize) {
+            const batch = await sqliteDb.all(`
+                SELECT * FROM players
+                LIMIT ${batchSize} OFFSET ${offset}
+            `);
 
-                await pgPool.query(`
-                    INSERT INTO players (fide_id, name, federation, sex, title, w_title, o_title, foa_title,
-                                       rating, rapid_rating, blitz_rating, birthday, flag)
-                    VALUES ${values}
-                    ON CONFLICT (fide_id) DO UPDATE SET
-                        name = EXCLUDED.name,
-                        federation = EXCLUDED.federation,
-                        sex = EXCLUDED.sex,
-                        title = EXCLUDED.title,
-                        w_title = EXCLUDED.w_title,
-                        o_title = EXCLUDED.o_title,
-                        foa_title = EXCLUDED.foa_title,
-                        rating = EXCLUDED.rating,
-                        rapid_rating = EXCLUDED.rapid_rating,
-                        blitz_rating = EXCLUDED.blitz_rating,
-                        birthday = EXCLUDED.birthday,
-                        flag = EXCLUDED.flag
-                `);
+            if (batch.length === 0) break;
 
-                console.log(`Migrated ${Math.min((i + 1) * 1000, players.length)} / ${players.length} players`);
+            // Use parameterized queries for safety
+            for (const player of batch) {
+                try {
+                    await pgPool.query(`
+                        INSERT INTO players (
+                            fide_id, name, federation, sex, title,
+                            birth_year, flag
+                        ) VALUES ($1, $2, $3, $4, $5, $6, $7)
+                        ON CONFLICT (fide_id) DO UPDATE SET
+                            name = EXCLUDED.name,
+                            federation = EXCLUDED.federation,
+                            title = EXCLUDED.title
+                    `, [
+                        player.fide_id,
+                        player.name,
+                        player.federation,
+                        player.sex,
+                        player.title,
+                        player.birth_year,
+                        player.flag
+                    ]);
+                    migrated++;
+                } catch (err) {
+                    // Continue on error for individual records
+                    console.error(`Error migrating player ${player.fide_id}:`, err.message);
+                }
+            }
+
+            if (offset % 10000 === 0 || offset + batchSize >= playerCount.count) {
+                console.log(`Progress: ${Math.min(offset + batchSize, playerCount.count)} / ${playerCount.count} players migrated`);
             }
         }
+
+        console.log(`Successfully migrated ${migrated} players`);
 
         // Migrate ratings table
         console.log('Migrating ratings...');
-        const ratings = await sqliteDb.all('SELECT * FROM ratings');
+        const ratingCount = await sqliteDb.get('SELECT COUNT(*) as count FROM ratings');
+        console.log(`Found ${ratingCount.count} ratings to migrate`);
+        console.log('Note: This will take several minutes due to the large dataset...');
 
-        if (ratings.length > 0) {
-            for (let i = 0; i < ratings.length; i += 1000) {
-                const batch = ratings.slice(i, i + 1000);
+        let ratingsMigrated = 0;
+        const ratingBatchSize = 1000;
 
-                const values = batch.map(r =>
-                    `(${r.fide_id}, '${r.period}', ${r.standard_rating || 'NULL'},
-                    ${r.rapid_rating || 'NULL'}, ${r.blitz_rating || 'NULL'},
-                    ${r.games || 'NULL'}, ${r.rapid_games || 'NULL'}, ${r.blitz_games || 'NULL'})`
-                ).join(',');
+        // Process ratings in batches
+        for (let offset = 0; offset < ratingCount.count; offset += ratingBatchSize) {
+            const batch = await sqliteDb.all(`
+                SELECT * FROM ratings
+                LIMIT ${ratingBatchSize} OFFSET ${offset}
+            `);
 
+            if (batch.length === 0) break;
+
+            // Build bulk insert values
+            const values = [];
+            const placeholders = [];
+            let paramIndex = 1;
+
+            for (const rating of batch) {
+                placeholders.push(`($${paramIndex}, $${paramIndex+1}, $${paramIndex+2}, $${paramIndex+3}, $${paramIndex+4}, $${paramIndex+5}, $${paramIndex+6}, $${paramIndex+7}, $${paramIndex+8})`);
+                values.push(
+                    rating.fide_id,
+                    rating.rating_date,
+                    rating.period || rating.rating_date, // Use rating_date as period if period is null
+                    rating.standard_rating,
+                    rating.rapid_rating,
+                    rating.blitz_rating,
+                    rating.standard_games || rating.games,
+                    rating.rapid_games,
+                    rating.blitz_games
+                );
+                paramIndex += 9;
+            }
+
+            try {
                 await pgPool.query(`
-                    INSERT INTO ratings (fide_id, period, standard_rating, rapid_rating, blitz_rating,
-                                       games, rapid_games, blitz_games)
-                    VALUES ${values}
-                    ON CONFLICT (fide_id, period) DO UPDATE SET
-                        standard_rating = EXCLUDED.standard_rating,
-                        rapid_rating = EXCLUDED.rapid_rating,
-                        blitz_rating = EXCLUDED.blitz_rating,
-                        games = EXCLUDED.games,
-                        rapid_games = EXCLUDED.rapid_games,
-                        blitz_games = EXCLUDED.blitz_games
-                `);
+                    INSERT INTO ratings (
+                        fide_id, rating_date, period,
+                        standard_rating, rapid_rating, blitz_rating,
+                        standard_games, rapid_games, blitz_games
+                    ) VALUES ${placeholders.join(',')}
+                    ON CONFLICT DO NOTHING
+                `, values);
 
-                console.log(`Migrated ${Math.min((i + 1) * 1000, ratings.length)} / ${ratings.length} ratings`);
+                ratingsMigrated += batch.length;
+            } catch (err) {
+                console.error(`Error migrating ratings batch at offset ${offset}:`, err.message);
+                // Try individual inserts for this batch
+                for (const rating of batch) {
+                    try {
+                        await pgPool.query(`
+                            INSERT INTO ratings (
+                                fide_id, rating_date, period,
+                                standard_rating, rapid_rating, blitz_rating,
+                                standard_games, rapid_games, blitz_games
+                            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+                            ON CONFLICT DO NOTHING
+                        `, [
+                            rating.fide_id,
+                            rating.rating_date,
+                            rating.period || rating.rating_date,
+                            rating.standard_rating,
+                            rating.rapid_rating,
+                            rating.blitz_rating,
+                            rating.standard_games || rating.games,
+                            rating.rapid_games,
+                            rating.blitz_games
+                        ]);
+                        ratingsMigrated++;
+                    } catch (innerErr) {
+                        // Skip individual errors
+                    }
+                }
+            }
+
+            if (offset % 100000 === 0 || offset + ratingBatchSize >= ratingCount.count) {
+                const progress = Math.min(offset + ratingBatchSize, ratingCount.count);
+                const percentage = Math.round((progress / ratingCount.count) * 100);
+                console.log(`Progress: ${progress} / ${ratingCount.count} ratings (${percentage}%)`);
             }
         }
+
+        console.log(`Successfully migrated ${ratingsMigrated} ratings`);
 
         // Migrate top100_snapshots table
         console.log('Migrating top100_snapshots...');
