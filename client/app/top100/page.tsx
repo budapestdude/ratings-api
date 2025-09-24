@@ -33,26 +33,35 @@ export default function Top2600Page() {
   const fetchTop100 = async () => {
     setLoading(true)
     try {
-      // For now, load from the static JSON file for standard category
-      if (category === 'standard' && listType === 'open') {
+      // Load from the static JSON file for all categories
+      if (listType === 'open') {
         const res = await fetch('/data/top_2600_standard.json')
         const data = await res.json()
 
         if (data && data.players) {
-          // Map the data to match the expected format
-          const mappedPlayers = data.players.map((p: any) => ({
+          // Map the data to match the expected format and sort by selected category
+          let mappedPlayers = data.players.map((p: any) => ({
             rank: p.rank,
             fide_id: p.fide_id,
             name: p.name,
             title: p.title,
             federation: p.federation,
-            rating: p.standard_rating || p.rating,
+            rating: category === 'rapid' ? (p.rapid_rating || 0) :
+                    category === 'blitz' ? (p.blitz_rating || 0) :
+                    (p.standard_rating || p.rating),
             standard_rating: p.standard_rating,
             rapid_rating: p.rapid_rating,
             blitz_rating: p.blitz_rating,
             birth_year: p.birth_year,
             sex: 'M' // Assuming men's list for now
           }))
+
+          // Sort by the selected rating category and re-rank
+          mappedPlayers = mappedPlayers
+            .filter((p: any) => p.rating > 0) // Filter out players without rating in this category
+            .sort((a: any, b: any) => b.rating - a.rating)
+            .map((p: any, index: number) => ({ ...p, rank: index + 1 }))
+
           setPlayers(mappedPlayers)
         } else {
           setPlayers(getPlaceholderPlayers())
@@ -317,7 +326,7 @@ export default function Top2600Page() {
                   <th className="text-center p-4 w-20">Rank</th>
                   <th className="text-left p-4">Name</th>
                   <th className="text-center p-4 w-24">Fed</th>
-                  <th className="text-center p-4 w-32">Std / Rpd / Blz</th>
+                  <th className="text-center p-4 w-32">{category === 'rapid' ? 'Rapid' : category === 'blitz' ? 'Blitz' : 'Standard'} / All</th>
                   <th className="text-center p-4 w-20">Age</th>
                   <th className="text-center p-4 w-24">Profile</th>
                 </tr>
@@ -357,14 +366,17 @@ export default function Top2600Page() {
                     </td>
                     <td className="text-center p-4">
                       <div className="flex flex-col gap-1">
-                        <span className={`text-lg font-bold ${getRatingColor(player.standard_rating || player.rating)}`}>
-                          {player.standard_rating || player.rating}
+                        <span className={`text-xl font-bold ${getRatingColor(player.rating)}`}>
+                          {player.rating || '-'}
                         </span>
-                        <div className="flex gap-2 justify-center text-sm">
-                          <span className="text-yellow-600 font-medium">
+                        <div className="flex gap-2 justify-center text-xs">
+                          <span className={category === 'standard' ? "font-bold text-gray-700" : "text-gray-500"}>
+                            S: {player.standard_rating || '-'}
+                          </span>
+                          <span className={category === 'rapid' ? "font-bold text-yellow-700" : "text-yellow-600"}>
                             R: {player.rapid_rating || '-'}
                           </span>
-                          <span className="text-green-600 font-medium">
+                          <span className={category === 'blitz' ? "font-bold text-green-700" : "text-green-600"}>
                             B: {player.blitz_rating || '-'}
                           </span>
                         </div>
