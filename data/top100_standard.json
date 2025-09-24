@@ -1,0 +1,807 @@
+{
+  "generated_at": "2025-09-24T12:41:15.576Z",
+  "category": "standard",
+  "count": 100,
+  "players": [
+    {
+      "rank": 1,
+      "fide_id": 1503014,
+      "name": "Carlsen, Magnus",
+      "federation": "NOR",
+      "rating": 2839,
+      "birth_year": 1990
+    },
+    {
+      "rank": 2,
+      "fide_id": 2016192,
+      "name": "Nakamura, Hikaru",
+      "federation": "USA",
+      "rating": 2807,
+      "birth_year": 1987
+    },
+    {
+      "rank": 3,
+      "fide_id": 2020009,
+      "name": "Caruana, Fabiano",
+      "federation": "USA",
+      "rating": 2784,
+      "birth_year": 1992
+    },
+    {
+      "rank": 4,
+      "fide_id": 25059530,
+      "name": "Praggnanandhaa R",
+      "federation": "IND",
+      "rating": 2779,
+      "birth_year": 2005
+    },
+    {
+      "rank": 5,
+      "fide_id": 35009192,
+      "name": "Erigaisi Arjun",
+      "federation": "IND",
+      "rating": 2776,
+      "birth_year": 2003
+    },
+    {
+      "rank": 6,
+      "fide_id": 46616543,
+      "name": "Gukesh D",
+      "federation": "IND",
+      "rating": 2776,
+      "birth_year": 2006
+    },
+    {
+      "rank": 7,
+      "fide_id": 14204118,
+      "name": "Abdusattorov, Nodirbek",
+      "federation": "UZB",
+      "rating": 2771,
+      "birth_year": 2004
+    },
+    {
+      "rank": 8,
+      "fide_id": 12573981,
+      "name": "Firouzja, Alireza",
+      "federation": "FRA",
+      "rating": 2766,
+      "birth_year": 2003
+    },
+    {
+      "rank": 9,
+      "fide_id": 8603405,
+      "name": "Wei, Yi",
+      "federation": "CHN",
+      "rating": 2748,
+      "birth_year": 1999
+    },
+    {
+      "rank": 10,
+      "fide_id": 24116068,
+      "name": "Giri, Anish",
+      "federation": "NED",
+      "rating": 2748,
+      "birth_year": 1994
+    },
+    {
+      "rank": 11,
+      "fide_id": 13401319,
+      "name": "Mamedyarov, Shakhriyar",
+      "federation": "AZE",
+      "rating": 2746,
+      "birth_year": 1985
+    },
+    {
+      "rank": 12,
+      "fide_id": 5202213,
+      "name": "So, Wesley",
+      "federation": "USA",
+      "rating": 2745,
+      "birth_year": 1993
+    },
+    {
+      "rank": 13,
+      "fide_id": 5000017,
+      "name": "Anand, Viswanathan",
+      "federation": "IND",
+      "rating": 2743,
+      "birth_year": 1969
+    },
+    {
+      "rank": 14,
+      "fide_id": 4168119,
+      "name": "Nepomniachtchi, Ian",
+      "federation": "RUS",
+      "rating": 2742,
+      "birth_year": 1990
+    },
+    {
+      "rank": 15,
+      "fide_id": 13300474,
+      "name": "Aronian, Levon",
+      "federation": "USA",
+      "rating": 2742,
+      "birth_year": 1982
+    },
+    {
+      "rank": 16,
+      "fide_id": 3503240,
+      "name": "Dominguez Perez, Leinier",
+      "federation": "USA",
+      "rating": 2738,
+      "birth_year": 1983
+    },
+    {
+      "rank": 17,
+      "fide_id": 623539,
+      "name": "Vachier-Lagrave, Maxime",
+      "federation": "FRA",
+      "rating": 2736,
+      "birth_year": 1990
+    },
+    {
+      "rank": 18,
+      "fide_id": 2093596,
+      "name": "Niemann, Hans Moke",
+      "federation": "USA",
+      "rating": 2736,
+      "birth_year": 2003
+    },
+    {
+      "rank": 19,
+      "fide_id": 8603677,
+      "name": "Ding, Liren",
+      "federation": "CHN",
+      "rating": 2734,
+      "birth_year": 1992
+    },
+    {
+      "rank": 20,
+      "fide_id": 12940690,
+      "name": "Keymer, Vincent",
+      "federation": "GER",
+      "rating": 2730,
+      "birth_year": 2004
+    },
+    {
+      "rank": 21,
+      "fide_id": 12401137,
+      "name": "Le, Quang Liem",
+      "federation": "VIE",
+      "rating": 2729,
+      "birth_year": 1991
+    },
+    {
+      "rank": 22,
+      "fide_id": 1170546,
+      "name": "Duda, Jan-Krzysztof",
+      "federation": "POL",
+      "rating": 2725,
+      "birth_year": 1998
+    },
+    {
+      "rank": 23,
+      "fide_id": 5072786,
+      "name": "Aravindh, Chithambaram VR.",
+      "federation": "IND",
+      "rating": 2724,
+      "birth_year": 1999
+    },
+    {
+      "rank": 24,
+      "fide_id": 14205483,
+      "name": "Sindarov, Javokhir",
+      "federation": "UZB",
+      "rating": 2722,
+      "birth_year": 2005
+    },
+    {
+      "rank": 25,
+      "fide_id": 5029465,
+      "name": "Vidit, Santosh Gujrathi",
+      "federation": "IND",
+      "rating": 2720,
+      "birth_year": 1994
+    },
+    {
+      "rank": 26,
+      "fide_id": 2900084,
+      "name": "Topalov, Veselin",
+      "federation": "BUL",
+      "rating": 2717,
+      "birth_year": 1975
+    },
+    {
+      "rank": 27,
+      "fide_id": 738590,
+      "name": "Rapport, Richard",
+      "federation": "HUN",
+      "rating": 2715,
+      "birth_year": 1996
+    },
+    {
+      "rank": 28,
+      "fide_id": 8603820,
+      "name": "Yu, Yangyi",
+      "federation": "CHN",
+      "rating": 2714,
+      "birth_year": 1994
+    },
+    {
+      "rank": 29,
+      "fide_id": 5007003,
+      "name": "Harikrishna, Pentala",
+      "federation": "IND",
+      "rating": 2709,
+      "birth_year": 1986
+    },
+    {
+      "rank": 30,
+      "fide_id": 8602883,
+      "name": "Wang, Hao",
+      "federation": "CHN",
+      "rating": 2701,
+      "birth_year": 1989
+    },
+    {
+      "rank": 31,
+      "fide_id": 1039784,
+      "name": "Van Foreest, Jorden",
+      "federation": "NED",
+      "rating": 2698,
+      "birth_year": 1999
+    },
+    {
+      "rank": 32,
+      "fide_id": 4102142,
+      "name": "Svidler, Peter",
+      "federation": "FID",
+      "rating": 2698,
+      "birth_year": 1976
+    },
+    {
+      "rank": 33,
+      "fide_id": 12539929,
+      "name": "Maghsoodloo, Parham",
+      "federation": "IRI",
+      "rating": 2695,
+      "birth_year": 2000
+    },
+    {
+      "rank": 34,
+      "fide_id": 4158814,
+      "name": "Andreikin, Dmitry",
+      "federation": "FID",
+      "rating": 2695,
+      "birth_year": 1990
+    },
+    {
+      "rank": 35,
+      "fide_id": 2056437,
+      "name": "Liang, Awonder",
+      "federation": "USA",
+      "rating": 2693,
+      "birth_year": 2003
+    },
+    {
+      "rank": 36,
+      "fide_id": 25092340,
+      "name": "Nihal Sarin",
+      "federation": "IND",
+      "rating": 2692,
+      "birth_year": 2004
+    },
+    {
+      "rank": 37,
+      "fide_id": 13400924,
+      "name": "Radjabov, Teimour",
+      "federation": "AZE",
+      "rating": 2692,
+      "birth_year": 1987
+    },
+    {
+      "rank": 38,
+      "fide_id": 24126055,
+      "name": "Dubov, Daniil",
+      "federation": "RUS",
+      "rating": 2691,
+      "birth_year": 1996
+    },
+    {
+      "rank": 39,
+      "fide_id": 2023970,
+      "name": "Robson, Ray",
+      "federation": "USA",
+      "rating": 2687,
+      "birth_year": 1994
+    },
+    {
+      "rank": 40,
+      "fide_id": 24133795,
+      "name": "Sarana, Alexey",
+      "federation": "SRB",
+      "rating": 2686,
+      "birth_year": 2000
+    },
+    {
+      "rank": 41,
+      "fide_id": 8601445,
+      "name": "Bu, Xiangzhi",
+      "federation": "CHN",
+      "rating": 2684,
+      "birth_year": 1985
+    },
+    {
+      "rank": 42,
+      "fide_id": 2040506,
+      "name": "Sevian, Samuel",
+      "federation": "USA",
+      "rating": 2683,
+      "birth_year": 2000
+    },
+    {
+      "rank": 43,
+      "fide_id": 35093487,
+      "name": "Sadhwani, Raunak",
+      "federation": "IND",
+      "rating": 2681,
+      "birth_year": 2005
+    },
+    {
+      "rank": 44,
+      "fide_id": 24175439,
+      "name": "Esipenko, Andrey",
+      "federation": "RUS",
+      "rating": 2679,
+      "birth_year": 2002
+    },
+    {
+      "rank": 45,
+      "fide_id": 14117908,
+      "name": "Kovalenko, Igor",
+      "federation": "UKR",
+      "rating": 2676,
+      "birth_year": 1988
+    },
+    {
+      "rank": 46,
+      "fide_id": 14102951,
+      "name": "Eljanov, Pavel",
+      "federation": "UKR",
+      "rating": 2675,
+      "birth_year": 1983
+    },
+    {
+      "rank": 47,
+      "fide_id": 14200244,
+      "name": "Kasimdzhanov, Rustam",
+      "federation": "UZB",
+      "rating": 2675,
+      "birth_year": 1979
+    },
+    {
+      "rank": 48,
+      "fide_id": 1226380,
+      "name": "Deac, Bogdan-Daniel",
+      "federation": "ROU",
+      "rating": 2674,
+      "birth_year": 2001
+    },
+    {
+      "rank": 49,
+      "fide_id": 358878,
+      "name": "Nguyen, Thai Dai Van",
+      "federation": "CZE",
+      "rating": 2674,
+      "birth_year": 2001
+    },
+    {
+      "rank": 50,
+      "fide_id": 24101605,
+      "name": "Artemiev, Vladislav",
+      "federation": "RUS",
+      "rating": 2672,
+      "birth_year": 1998
+    },
+    {
+      "rank": 51,
+      "fide_id": 44155573,
+      "name": "Murzin, Volodar",
+      "federation": "FID",
+      "rating": 2671,
+      "birth_year": 2006
+    },
+    {
+      "rank": 52,
+      "fide_id": 4152956,
+      "name": "Vitiugov, Nikita",
+      "federation": "ENG",
+      "rating": 2671,
+      "birth_year": 1987
+    },
+    {
+      "rank": 53,
+      "fide_id": 2004887,
+      "name": "Shankland, Sam",
+      "federation": "USA",
+      "rating": 2670,
+      "birth_year": 1991
+    },
+    {
+      "rank": 54,
+      "fide_id": 13306766,
+      "name": "Sargsyan, Shant",
+      "federation": "ARM",
+      "rating": 2669,
+      "birth_year": 2002
+    },
+    {
+      "rank": 55,
+      "fide_id": 410608,
+      "name": "Howell, David W L",
+      "federation": "ENG",
+      "rating": 2668,
+      "birth_year": 1990
+    },
+    {
+      "rank": 56,
+      "fide_id": 4126025,
+      "name": "Grischuk, Alexander",
+      "federation": "RUS",
+      "rating": 2667,
+      "birth_year": 1983
+    },
+    {
+      "rank": 57,
+      "fide_id": 703303,
+      "name": "Leko, Peter",
+      "federation": "HUN",
+      "rating": 2666,
+      "birth_year": 1979
+    },
+    {
+      "rank": 58,
+      "fide_id": 14203987,
+      "name": "Yakubboev, Nodirbek",
+      "federation": "UZB",
+      "rating": 2663,
+      "birth_year": 2002
+    },
+    {
+      "rank": 59,
+      "fide_id": 309095,
+      "name": "Navara, David",
+      "federation": "CZE",
+      "rating": 2662,
+      "birth_year": 1985
+    },
+    {
+      "rank": 60,
+      "fide_id": 911925,
+      "name": "Indjic, Aleksandar",
+      "federation": "SRB",
+      "rating": 2661,
+      "birth_year": 1995
+    },
+    {
+      "rank": 61,
+      "fide_id": 14508150,
+      "name": "Saric, Ivan",
+      "federation": "CRO",
+      "rating": 2661,
+      "birth_year": 1990
+    },
+    {
+      "rank": 62,
+      "fide_id": 24125890,
+      "name": "Oparin, Grigoriy",
+      "federation": "USA",
+      "rating": 2660,
+      "birth_year": 1997
+    },
+    {
+      "rank": 63,
+      "fide_id": 24651516,
+      "name": "Bluebaum, Matthias",
+      "federation": "GER",
+      "rating": 2660,
+      "birth_year": 1997
+    },
+    {
+      "rank": 64,
+      "fide_id": 13401653,
+      "name": "Mamedov, Rauf",
+      "federation": "AZE",
+      "rating": 2659,
+      "birth_year": 1988
+    },
+    {
+      "rank": 65,
+      "fide_id": 12923044,
+      "name": "Svane, Frederik",
+      "federation": "GER",
+      "rating": 2659,
+      "birth_year": 2004
+    },
+    {
+      "rank": 66,
+      "fide_id": 12521213,
+      "name": "Tabatabaei, M. Amin",
+      "federation": "IRI",
+      "rating": 2659,
+      "birth_year": 2001
+    },
+    {
+      "rank": 67,
+      "fide_id": 1444948,
+      "name": "Bjerre, Jonas Buhl",
+      "federation": "DEN",
+      "rating": 2655,
+      "birth_year": 2004
+    },
+    {
+      "rank": 68,
+      "fide_id": 400041,
+      "name": "Adams, Michael",
+      "federation": "ENG",
+      "rating": 2654,
+      "birth_year": 1971
+    },
+    {
+      "rank": 69,
+      "fide_id": 409561,
+      "name": "Maroroa Jones, Gawain C B",
+      "federation": "ENG",
+      "rating": 2653,
+      "birth_year": 1987
+    },
+    {
+      "rank": 70,
+      "fide_id": 44507356,
+      "name": "Gurel, Ediz",
+      "federation": "TUR",
+      "rating": 2652,
+      "birth_year": 2008
+    },
+    {
+      "rank": 71,
+      "fide_id": 4135539,
+      "name": "Alekseenko, Kirill",
+      "federation": "AUT",
+      "rating": 2652,
+      "birth_year": 1997
+    },
+    {
+      "rank": 72,
+      "fide_id": 2805677,
+      "name": "Gelfand, Boris",
+      "federation": "ISR",
+      "rating": 2652,
+      "birth_year": 1968
+    },
+    {
+      "rank": 73,
+      "fide_id": 1118358,
+      "name": "Wojtaszek, Radoslaw",
+      "federation": "POL",
+      "rating": 2651,
+      "birth_year": 1987
+    },
+    {
+      "rank": 74,
+      "fide_id": 5074452,
+      "name": "Karthikeyan, Murali",
+      "federation": "IND",
+      "rating": 2650,
+      "birth_year": 1999
+    },
+    {
+      "rank": 75,
+      "fide_id": 14204223,
+      "name": "Vokhidov, Shamsiddin",
+      "federation": "UZB",
+      "rating": 2650,
+      "birth_year": 2002
+    },
+    {
+      "rank": 76,
+      "fide_id": 4116992,
+      "name": "Morozevich, Alexander",
+      "federation": "RUS",
+      "rating": 2650,
+      "birth_year": 1977
+    },
+    {
+      "rank": 77,
+      "fide_id": 712779,
+      "name": "Gledura, Benjamin",
+      "federation": "HUN",
+      "rating": 2648,
+      "birth_year": 1999
+    },
+    {
+      "rank": 78,
+      "fide_id": 24131423,
+      "name": "Yuffa, Daniil",
+      "federation": "ESP",
+      "rating": 2647,
+      "birth_year": 1997
+    },
+    {
+      "rank": 79,
+      "fide_id": 8603332,
+      "name": "Lu, Shanglei",
+      "federation": "CHN",
+      "rating": 2647,
+      "birth_year": 1995
+    },
+    {
+      "rank": 80,
+      "fide_id": 2047640,
+      "name": "Xiong, Jeffery",
+      "federation": "USA",
+      "rating": 2646,
+      "birth_year": 2000
+    },
+    {
+      "rank": 81,
+      "fide_id": 2806851,
+      "name": "Rodshtein, Maxim",
+      "federation": "ISR",
+      "rating": 2645,
+      "birth_year": 1989
+    },
+    {
+      "rank": 82,
+      "fide_id": 12909572,
+      "name": "Kollars, Dmitrij",
+      "federation": "GER",
+      "rating": 2644,
+      "birth_year": 1999
+    },
+    {
+      "rank": 83,
+      "fide_id": 1710400,
+      "name": "Grandelius, Nils",
+      "federation": "SWE",
+      "rating": 2642,
+      "birth_year": 1993
+    },
+    {
+      "rank": 84,
+      "fide_id": 4120787,
+      "name": "Malakhov, Vladimir",
+      "federation": "FID",
+      "rating": 2642,
+      "birth_year": 1980
+    },
+    {
+      "rank": 85,
+      "fide_id": 1512668,
+      "name": "Christiansen, Johan-Sebastian",
+      "federation": "NOR",
+      "rating": 2642,
+      "birth_year": 1998
+    },
+    {
+      "rank": 86,
+      "fide_id": 14100010,
+      "name": "Ivanchuk, Vasyl",
+      "federation": "UKR",
+      "rating": 2641,
+      "birth_year": 1969
+    },
+    {
+      "rank": 87,
+      "fide_id": 12576468,
+      "name": "Daneshvar, Bardiya",
+      "federation": "IRI",
+      "rating": 2640,
+      "birth_year": 2006
+    },
+    {
+      "rank": 88,
+      "fide_id": 950122,
+      "name": "Ivic, Velimir",
+      "federation": "SRB",
+      "rating": 2639,
+      "birth_year": 2002
+    },
+    {
+      "rank": 89,
+      "fide_id": 2205530,
+      "name": "Vallejo Pons, Francisco",
+      "federation": "ESP",
+      "rating": 2638,
+      "birth_year": 1982
+    },
+    {
+      "rank": 90,
+      "fide_id": 13302485,
+      "name": "Melkumyan, Hrant",
+      "federation": "ARM",
+      "rating": 2636,
+      "birth_year": 1989
+    },
+    {
+      "rank": 91,
+      "fide_id": 1510045,
+      "name": "Tari, Aryan",
+      "federation": "NOR",
+      "rating": 2636,
+      "birth_year": 1999
+    },
+    {
+      "rank": 92,
+      "fide_id": 5061245,
+      "name": "Puranik, Abhimanyu",
+      "federation": "IND",
+      "rating": 2635,
+      "birth_year": 2000
+    },
+    {
+      "rank": 93,
+      "fide_id": 4189302,
+      "name": "Sjugirov, Sanan",
+      "federation": "HUN",
+      "rating": 2635,
+      "birth_year": 1993
+    },
+    {
+      "rank": 94,
+      "fide_id": 10601457,
+      "name": "Amin, Bassem",
+      "federation": "EGY",
+      "rating": 2633,
+      "birth_year": 1988
+    },
+    {
+      "rank": 95,
+      "fide_id": 8602980,
+      "name": "Hou, Yifan",
+      "federation": "CHN",
+      "rating": 2633,
+      "birth_year": 1994
+    },
+    {
+      "rank": 96,
+      "fide_id": 14109182,
+      "name": "Kryvoruchko, Yuriy",
+      "federation": "UKR",
+      "rating": 2633,
+      "birth_year": 1986
+    },
+    {
+      "rank": 97,
+      "fide_id": 14105730,
+      "name": "Korobov, Anton",
+      "federation": "UKR",
+      "rating": 2631,
+      "birth_year": 1985
+    },
+    {
+      "rank": 98,
+      "fide_id": 605506,
+      "name": "Bacrot, Etienne",
+      "federation": "FRA",
+      "rating": 2631,
+      "birth_year": 1983
+    },
+    {
+      "rank": 99,
+      "fide_id": 13402129,
+      "name": "Safarli, Eltaj",
+      "federation": "AZE",
+      "rating": 2630,
+      "birth_year": 1992
+    },
+    {
+      "rank": 100,
+      "fide_id": 2905540,
+      "name": "Cheparinov, Ivan",
+      "federation": "BUL",
+      "rating": 2630,
+      "birth_year": 1986
+    }
+  ]
+}
