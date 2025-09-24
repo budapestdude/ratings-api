@@ -30,36 +30,60 @@ export default function Top100Page() {
   const fetchTop100 = async () => {
     setLoading(true)
     try {
-      const params = new URLSearchParams({
-        category,
-        limit: '100'
-      })
+      // For now, load from the static JSON file for standard category
+      if (category === 'standard' && listType === 'open') {
+        const res = await fetch('/data/top100_standard.json')
+        const data = await res.json()
 
-      // Add filters based on list type
-      switch(listType) {
-        case 'women':
-          params.append('sex', 'F')
-          break
-        case 'juniors':
-          params.append('maxAge', '20')
-          break
-        case 'girls':
-          params.append('sex', 'F')
-          params.append('maxAge', '20')
-          break
-        case 'seniors':
-          params.append('minAge', '50')
-          break
-      }
-
-      const res = await fetch(`/api/backend/rankings/top?${params}`)
-      const data = await res.json()
-      
-      if (data.success && data.data) {
-        setPlayers(data.data)
+        if (data && data.players) {
+          // Map the data to match the expected format
+          const mappedPlayers = data.players.map((p: any) => ({
+            rank: p.rank,
+            fide_id: p.fide_id,
+            name: p.name,
+            title: p.title,
+            federation: p.federation,
+            rating: p.standard_rating || p.rating,
+            birth_year: p.birth_year,
+            sex: 'M' // Assuming men's list for now
+          }))
+          setPlayers(mappedPlayers)
+        } else {
+          setPlayers(getPlaceholderPlayers())
+        }
       } else {
-        // Use placeholder data if API fails
-        setPlayers(getPlaceholderPlayers())
+        // For other categories/types, try the API endpoint
+        const params = new URLSearchParams({
+          category,
+          limit: '100'
+        })
+
+        // Add filters based on list type
+        switch(listType) {
+          case 'women':
+            params.append('sex', 'F')
+            break
+          case 'juniors':
+            params.append('maxAge', '20')
+            break
+          case 'girls':
+            params.append('sex', 'F')
+            params.append('maxAge', '20')
+            break
+          case 'seniors':
+            params.append('minAge', '50')
+            break
+        }
+
+        const res = await fetch(`/api/backend/rankings/top?${params}`)
+        const data = await res.json()
+
+        if (data.success && data.data) {
+          setPlayers(data.data)
+        } else {
+          // Use placeholder data if API fails
+          setPlayers(getPlaceholderPlayers())
+        }
       }
     } catch (error) {
       console.error('Error fetching top 100:', error)
