@@ -10,6 +10,9 @@ interface RankedPlayer {
   title?: string
   federation?: string
   rating: number
+  standard_rating?: number
+  rapid_rating?: number
+  blitz_rating?: number
   birth_year?: number
   sex?: string
 }
@@ -44,6 +47,9 @@ export default function Top2600Page() {
             title: p.title,
             federation: p.federation,
             rating: p.standard_rating || p.rating,
+            standard_rating: p.standard_rating,
+            rapid_rating: p.rapid_rating,
+            blitz_rating: p.blitz_rating,
             birth_year: p.birth_year,
             sex: 'M' // Assuming men's list for now
           }))
@@ -311,7 +317,7 @@ export default function Top2600Page() {
                   <th className="text-center p-4 w-20">Rank</th>
                   <th className="text-left p-4">Name</th>
                   <th className="text-center p-4 w-24">Fed</th>
-                  <th className="text-center p-4 w-24">Rating</th>
+                  <th className="text-center p-4 w-32">Std / Rpd / Blz</th>
                   <th className="text-center p-4 w-20">Age</th>
                   <th className="text-center p-4 w-24">Profile</th>
                 </tr>
@@ -350,9 +356,19 @@ export default function Top2600Page() {
                       </div>
                     </td>
                     <td className="text-center p-4">
-                      <span className={`text-2xl font-bold ${getRatingColor(player.rating)}`}>
-                        {player.rating}
-                      </span>
+                      <div className="flex flex-col gap-1">
+                        <span className={`text-lg font-bold ${getRatingColor(player.standard_rating || player.rating)}`}>
+                          {player.standard_rating || player.rating}
+                        </span>
+                        <div className="flex gap-2 justify-center text-sm">
+                          <span className="text-yellow-600 font-medium">
+                            R: {player.rapid_rating || '-'}
+                          </span>
+                          <span className="text-green-600 font-medium">
+                            B: {player.blitz_rating || '-'}
+                          </span>
+                        </div>
+                      </div>
                     </td>
                     <td className="text-center p-4 text-gray-600">
                       {getAge(player.birth_year) || '-'}
