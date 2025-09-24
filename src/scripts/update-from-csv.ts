@@ -22,7 +22,7 @@ function parseCSV(csvContent: string): PlayerRating[] {
 
     const players: PlayerRating[] = [];
 
-    for (let i = 1; i < lines.length && i <= 100; i++) {
+    for (let i = 1; i < lines.length; i++) {
         const values = lines[i].split(',');
 
         if (values.length < 6) continue;
@@ -112,7 +112,7 @@ async function updateDatabase(players: PlayerRating[]) {
 }
 
 function generateTop100Json(players: PlayerRating[]) {
-    const top100 = players.slice(0, 100).map((player, index) => ({
+    const allPlayers = players.map((player, index) => ({
         rank: index + 1,
         fide_id: player.fide_id,
         name: player.name,
@@ -124,22 +124,22 @@ function generateTop100Json(players: PlayerRating[]) {
         birth_year: player.birth_year
     }));
 
-    const outputPath = path.join(process.cwd(), 'data', 'top100_standard.json');
+    const outputPath = path.join(process.cwd(), 'data', 'top_2600_standard.json');
 
     fs.mkdirSync(path.dirname(outputPath), { recursive: true });
 
     fs.writeFileSync(outputPath, JSON.stringify({
         generated_at: new Date().toISOString(),
         category: 'standard',
-        count: top100.length,
+        count: allPlayers.length,
         source: '2600+ men CSV',
-        players: top100
+        players: allPlayers
     }, null, 2));
 
-    console.log(`✅ Generated top 100 list at: ${outputPath}`);
+    console.log(`✅ Generated top 2600+ list with ${allPlayers.length} players at: ${outputPath}`);
 
     console.log('\n🏆 Top 10 players with all ratings:');
-    top100.slice(0, 10).forEach(p => {
+    allPlayers.slice(0, 10).forEach(p => {
         console.log(`${p.rank}. ${p.title || ''} ${p.name} (${p.federation}) - Std: ${p.standard_rating}, Rpd: ${p.rapid_rating || 'N/A'}, Blz: ${p.blitz_rating || 'N/A'}`);
     });
 }

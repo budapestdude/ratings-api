@@ -17,7 +17,7 @@ interface RankedPlayer {
 type Category = 'standard' | 'rapid' | 'blitz'
 type ListType = 'open' | 'women' | 'juniors' | 'girls' | 'seniors'
 
-export default function Top100Page() {
+export default function Top2600Page() {
   const [category, setCategory] = useState<Category>('standard')
   const [listType, setListType] = useState<ListType>('open')
   const [players, setPlayers] = useState<RankedPlayer[]>([])
@@ -32,7 +32,7 @@ export default function Top100Page() {
     try {
       // For now, load from the static JSON file for standard category
       if (category === 'standard' && listType === 'open') {
-        const res = await fetch('/data/top100_standard.json')
+        const res = await fetch('/data/top_2600_standard.json')
         const data = await res.json()
 
         if (data && data.players) {
@@ -181,11 +181,11 @@ export default function Top100Page() {
   const getListTitle = () => {
     const categoryName = category.charAt(0).toUpperCase() + category.slice(1)
     switch(listType) {
-      case 'women': return `Top 100 Women - ${categoryName}`
-      case 'juniors': return `Top 100 Juniors (U20) - ${categoryName}`
-      case 'girls': return `Top 100 Girls (U20) - ${categoryName}`
-      case 'seniors': return `Top 100 Seniors (50+) - ${categoryName}`
-      default: return `Top 100 Open - ${categoryName}`
+      case 'women': return `Women 2600+ - ${categoryName}`
+      case 'juniors': return `Juniors 2600+ (U20) - ${categoryName}`
+      case 'girls': return `Girls 2600+ (U20) - ${categoryName}`
+      case 'seniors': return `Seniors 2600+ (50+) - ${categoryName}`
+      default: return `Top 2600+ Players - ${categoryName}`
     }
   }
 
@@ -194,7 +194,7 @@ export default function Top100Page() {
       <div className="container mx-auto p-8">
         {/* Header */}
         <div className={`bg-gradient-to-r ${getCategoryColor(category)} rounded-2xl shadow-2xl p-8 mb-8 text-white`}>
-          <h1 className="text-4xl font-bold mb-4">{getListTitle()}</h1>
+          <h1 className="text-4xl font-bold mb-4">Top 2600+ Players - {category.charAt(0).toUpperCase() + category.slice(1)}</h1>
           <p className="text-xl opacity-90">World Chess Federation Official Rankings</p>
           <p className="text-sm opacity-75 mt-2">Last updated: August 2025</p>
         </div>
@@ -283,7 +283,7 @@ export default function Top100Page() {
           <div className="flex justify-center items-center py-20">
             <div className="text-center">
               <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-fide-blue mx-auto"></div>
-              <div className="text-xl mt-4">Loading top 100...</div>
+              <div className="text-xl mt-4">Loading top 2600+ players...</div>
             </div>
           </div>
         )}
@@ -388,7 +388,7 @@ export default function Top100Page() {
               const url = window.URL.createObjectURL(blob)
               const a = document.createElement('a')
               a.href = url
-              a.download = `top100_${category}_${listType}_${new Date().toISOString().split('T')[0]}.csv`
+              a.download = `top_2600_${category}_${listType}_${new Date().toISOString().split('T')[0]}.csv`
               a.click()
             }}
             className="px-6 py-3 bg-gray-200 hover:bg-gray-300 rounded-lg font-semibold transition"
